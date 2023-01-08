@@ -1,0 +1,10 @@
+variables:
+  DESTDIR: ""
+  build-mode: debug
+  num-procs: $ nproc 2>/dev/null || sysctl -n hw.activecpu 2>/dev/null || echo 4
+  prefix: "${TREE_PATH}/target/${build-mode}"
+  python: python3
+  py-version: $ ${python} -c 'import sys; print("%s%s" % sys.version_info[:2])'
+  py-venv: env${py-version}
+  py-venv-args: ""
+...
