@@ -16,7 +16,7 @@ Add this snippet to your `garden.yaml`:
 garden:
     includes: garden-seeds/templates.yaml
 trees:
-    garden-soil: https://github.com/davvid/garden-seeds.git
+    garden-seeds: https://github.com/davvid/garden-seeds.git
 ```
 
 And then run:
