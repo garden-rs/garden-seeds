@@ -8,18 +8,19 @@ templates:
       PATH: "${TREE_PATH}/bin"
 
   git-annex-ignore:
-    variables:
-      git-annex-ignore-remote: origin
     description: |
       Configure git-annex to ignore the origin repository. This is needed when
       origin contains only metadata and the data is replacated across multiple worktrees
       using git-annex.
+    variables:
+      git-annex-ignore-remote: origin
     gitconfig:
       remote.${git-annex-ignore-remote}.annex-ignore: true
 
   makefile:
     variables:
-      make-cmd: make -j${num-procs} DESTDIR="${DESTDIR}" prefix="${prefix}"
+      make-args: ""
+      make-cmd: make -j${num-procs} DESTDIR="${DESTDIR}" prefix="${prefix}" ${make-args}
     commands:
       build: ${make-cmd} all "$@"
       install: ${make-cmd} install "$@"
