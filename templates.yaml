@@ -13,18 +13,18 @@ templates:
       origin contains only metadata and the data is replacated across multiple worktrees
       using git-annex.
     variables:
-      git-annex-ignore-remote: origin
+      git_annex_ignore_remote: origin
     gitconfig:
-      remote.${git-annex-ignore-remote}.annex-ignore: true
+      remote.${git_annex_ignore_remote}.annex-ignore: true
 
   makefile:
     variables:
-      make-args: ""
-      make-cmd: make -j${num-procs} DESTDIR="${DESTDIR}" prefix="${prefix}" ${make-args}
+      make_args: ""
+      make_cmd: make -j${num_procs} DESTDIR="${DESTDIR}" prefix="${prefix}" ${make_args}
     commands:
-      build: ${make-cmd} all "$@"
-      install: ${make-cmd} install "$@"
-      test: ${make-cmd} test "$@"
+      build: ${make_cmd} all "$@"
+      install: ${make_cmd} install "$@"
+      test: ${make_cmd} test "$@"
 
   python:
     description: |

@@ -1,11 +1,11 @@
 variables:
   DESTDIR: ""
   build-mode: debug
-  num-procs: $ nproc 2>/dev/null || sysctl -n hw.activecpu 2>/dev/null || echo 4
+  num_procs: $ nproc 2>/dev/null || sysctl -n hw.activecpu 2>/dev/null || echo 4
   prefix: "${TREE_PATH}/target/${build-mode}"
   python: python3
-  py-version: $ ${python} -c 'import sysconfig as sc; print(sc.get_python_version())'
-  py-version-brief: $ ${python} -c 'import sys; print("%s%s" % sys.version_info[:2])'
-  py-venv: env${py-version-brief}
-  py-venv-args: ""
+  py_version: $ ${python} -c 'import sysconfig as sc; print(sc.get_python_version())'
+  py_version_brief: $ ${python} -c 'import sys; print("%s%s" % sys.version_info[:2])'
+  py_venv: env${py_version_brief}
+  py_venv_args: ""
 ...
