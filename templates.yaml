@@ -7,6 +7,48 @@ templates:
     environment:
       PATH: "${TREE_PATH}/bin"
 
+  cmake:
+    description: Build a generic cmake project
+    environment:
+      PATH: "${prefix}/bin"
+    variables:
+      # cmake_build_type maps ${build_mode} to an appropriate CMAKE_BUILD_TYPE.
+      # The default build mode maps to CMAKE_BUILD_TYPE=RelWithDebInfo.
+      # Variants on "debug/dbg" map to "Debug".
+      # Variants on "opt/optimize/rel/release" map to "Release".
+      cmake_build_type: |
+        $ case "${build_mode}" in
+        *debug*|*dbg*)
+          echo Debug
+          ;;
+        *opt*|*rel*)
+          echo Release
+          ;;
+        *)
+          echo RelWithDebInfo
+          ;;
+        esac
+      cmake_generator: Ninja
+      cmake_extra_args: ""
+    commands:
+      build: |
+        build_dir=build/${build_mode}
+        test -d $build_dir &&
+        test $build_dir/cmake.conf -nt CMakeLists.txt ||
+          cmake \
+            -G ${cmake_generator} \
+            -B $build_dir \
+            -D CMAKE_INSTALL_PREFIX=${prefix} \
+            -D CMAKE_BUILD_TYPE=${cmake_build_type} \
+            -D CMAKE_EXPORT_COMPILE_COMMANDS=ON \
+            ${cmake_extra_args} .
+        cmake --build $build_dir -- -j${num_procs}
+        # Link build/compile_commands.json to the current build
+        rm -f build/compile_commands.json
+        ln -s $build_dir/compile_commands.json build/compile_commands.json
+      install: |
+        cmake --install build/${build_mode}
+
   git-annex-ignore:
     description: |
       Configure git-annex to ignore the origin repository. This is needed when
