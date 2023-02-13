@@ -42,11 +42,11 @@ templates:
 
   rust:
     variables:
-      cargo-build-args: $ test "${build-mode}" = release && printf '%s' --release
+      cargo_build_args: $ test "${build_mode}" = release && printf '%s' --release
     environment:
-      PATH: "${TREE_PATH}/target/${build-mode}"
+      PATH: "${TREE_PATH}/target/${build_mode}"
     commands:
-      build: cargo build ${cargo-build-args} "$@"
+      build: cargo build ${cargo_build_args} "$@"
       check: |
         cargo check "$@"
         cargo clippy --all "$@" -- -D warnings
