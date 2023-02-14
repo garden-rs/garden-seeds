@@ -84,15 +84,16 @@ templates:
 
   rust:
     variables:
-      cargo_build_args: $ test "${build_mode}" = release && printf '%s' --release
+      cargo_build_args: ""
+      cargo_build_release: $ test "${build_mode}" = "release" && printf '%s' --release
     environment:
       PATH: "${TREE_PATH}/target/${build_mode}"
     commands:
-      build: cargo build ${cargo_build_args} "$@"
+      build: cargo build ${cargo_build_release} ${cargo_build_args} "$@"
       check: |
         cargo check "$@"
-        cargo clippy --all "$@" -- -D warnings
-        cargo fmt --check "$@"
+        cargo clippy --all -- -D warnings
+        cargo fmt --check
       check/clippy: cargo clippy --fix "$@" -- -D warnings
       check/fmt: cargo fmt --check "$@"
       clean: cargo clean "$@"
