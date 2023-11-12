@@ -1,5 +1,6 @@
 variables:
   DESTDIR: ""
+  git_remote: origin
   build_mode: debug
   num_procs: $ nproc 2>/dev/null || sysctl -n hw.activecpu 2>/dev/null || echo 4
   prefix: "${TREE_PATH}/${target_path}"

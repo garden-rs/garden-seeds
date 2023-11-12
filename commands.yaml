@@ -1,10 +1,7 @@
 ---
-variables:
-  origin: origin
-
 commands:
   git: git "$@"
   mergeup: |
-    git fetch --prune "${origin}"
+    git fetch --prune "${git_remote}"
     git merge --ff-only "$@"
 ...
