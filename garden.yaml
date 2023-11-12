@@ -1,0 +1,10 @@
+---
+trees:
+  garden-seeds:
+    path: "${GARDEN_CONFIG_DIR}"
+    url: "git@gitlab.com:davvid/garden-seeds.git"
+    remotes:
+      github: "git@github.com:davvid/garden-seeds.git"
+garden:
+  root: "${GARDEN_CONFIG_DIR}"
+...
