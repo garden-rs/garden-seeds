@@ -1,13 +1,16 @@
 variables:
+  # Directory variables
+  # https://www.gnu.org/prep/standards/html_node/Directory-Variables.html#Directory-Variables
   DESTDIR: ""
-  git_remote: origin
-  build_mode: debug
-  num_procs: $ nproc 2>/dev/null || sysctl -n hw.activecpu 2>/dev/null || echo 4
   prefix: "${TREE_PATH}/${target_path}"
+  # Everything else
+  build_mode: debug
+  git_remote: origin
+  num_procs: $ nproc 2>/dev/null || sysctl -n hw.activecpu 2>/dev/null || echo 4
   python: python3
-  target_path: "target/${build_mode}"
   py_version: $ ${python} -c 'import sysconfig as sc; print(sc.get_python_version())'
   py_version_brief: $ ${python} -c 'import sys; print("%s%s" % sys.version_info[:2])'
   py_venv: env${py_version_brief}
   py_venv_args: ""
+  target_path: "target/${build_mode}"
 ...
