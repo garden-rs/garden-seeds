@@ -3,7 +3,7 @@
 Seeds help gardens grow.
 
 This is my personal colleciton of reusable templates for
-[Garden](https://github.com/davvid/garden).
+[Garden](https://gitlab.com/garden-rs/garden).
 
 Garden is a developer tool for working with collections of Git worktrees.
 
@@ -16,7 +16,7 @@ Add this snippet to your `garden.yaml`:
 garden:
     includes: garden-seeds/templates.yaml
 trees:
-    garden-seeds: https://github.com/davvid/garden-seeds.git
+    garden-seeds: https://gitlab.com/davvid/garden-seeds.git
 ```
 
 And then run:
