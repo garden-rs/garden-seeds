@@ -86,6 +86,7 @@ templates:
     variables:
       cargo_build_args: ""
       cargo_build_release: $ test "${build_mode}" = "release" && printf '%s' --release
+      cargo_test_args: ""
     environment:
       PATH: "${TREE_PATH}/${target_path}"
     commands:
@@ -101,6 +102,6 @@ templates:
       fmt: cargo fmt "$@"
       publish: cargo publish "$@"
       run: cargo run "$@"
-      test: cargo test --jobs ${num_procs} "$@"
+      test: cargo test --jobs ${num_procs} ${cargo_test_args} "$@"
       update: cargo update "$@"
 ...
