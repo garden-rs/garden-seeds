@@ -2,8 +2,9 @@ variables:
   DESTDIR: ""
   build_mode: debug
   num_procs: $ nproc 2>/dev/null || sysctl -n hw.activecpu 2>/dev/null || echo 4
-  prefix: "${TREE_PATH}/target/${build_mode}"
+  prefix: "${TREE_PATH}/${target_path}"
   python: python3
+  target_path: "target/${build_mode}"
   py_version: $ ${python} -c 'import sysconfig as sc; print(sc.get_python_version())'
   py_version_brief: $ ${python} -c 'import sys; print("%s%s" % sys.version_info[:2])'
   py_venv: env${py_version_brief}
