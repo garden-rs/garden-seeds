@@ -5,6 +5,8 @@ trees:
     url: "git@gitlab.com:davvid/garden-seeds.git"
     remotes:
       github: "git@github.com:davvid/garden-seeds.git"
-garden:
-  root: "${GARDEN_CONFIG_DIR}"
+    gitconfig:
+      remote.publish.pushurl:
+        - "git@gitlab.com:davvid/garden-seeds.git"
+        - "git@github.com:davvid/garden-seeds.git"
 ...
