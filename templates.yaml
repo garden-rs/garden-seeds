@@ -41,6 +41,7 @@ templates:
             -D CMAKE_INSTALL_PREFIX=${prefix} \
             -D CMAKE_BUILD_TYPE=${cmake_build_type} \
             -D CMAKE_EXPORT_COMPILE_COMMANDS=ON \
+            -D CMAKE_INSTALL_MESSAGE=NEVER \
             ${cmake_extra_args} .
         cmake --build $build_dir -- -j${num_procs}
         # Link build/compile_commands.json to the current build
