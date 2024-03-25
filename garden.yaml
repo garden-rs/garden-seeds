@@ -2,11 +2,11 @@
 trees:
   garden-seeds:
     path: "${GARDEN_CONFIG_DIR}"
-    url: "git@gitlab.com:davvid/garden-seeds.git"
+    url: "git@gitlab.com:garden-rs/garden-seeds.git"
     remotes:
-      github: "git@github.com:davvid/garden-seeds.git"
+      github: "git@github.com:garden-rs/garden-seeds.git"
     gitconfig:
       remote.publish.pushurl:
-        - "git@gitlab.com:davvid/garden-seeds.git"
-        - "git@github.com:davvid/garden-seeds.git"
+        - "git@gitlab.com:garden-rs/garden-seeds.git"
+        - "git@github.com:garden-rs/garden-seeds.git"
 ...
