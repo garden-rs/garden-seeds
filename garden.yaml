@@ -1,12 +1,15 @@
----
 trees:
-  garden-seeds:
-    path: "${GARDEN_CONFIG_DIR}"
-    url: "git@gitlab.com:garden-rs/garden-seeds.git"
-    remotes:
-      github: "git@github.com:garden-rs/garden-seeds.git"
-    gitconfig:
-      remote.origin.pushurl:
-        - "git@gitlab.com:garden-rs/garden-seeds.git"
-        - "git@github.com:garden-rs/garden-seeds.git"
-...
+    garden-seeds:
+        description: Reusable templates for garden
+        path: "${GARDEN_CONFIG_DIR}"
+        url: "git@gitlab.com:garden-rs/garden-seeds.git"
+        remotes:
+            github: "git@github.com:garden-rs/garden-seeds.git"
+        gitconfig:
+            remote.origin.pushurl:
+                - "git@gitlab.com:garden-rs/garden-seeds.git"
+                - "git@github.com:garden-rs/garden-seeds.git"
+        links:
+            - https://crates.io/crates/garden-tools
+            - https://gitlab.com/garden-rs/garden
+            - https://gitlab.com/garden-rs/garden-seeds
