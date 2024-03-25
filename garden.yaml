@@ -6,7 +6,7 @@ trees:
     remotes:
       github: "git@github.com:garden-rs/garden-seeds.git"
     gitconfig:
-      remote.publish.pushurl:
+      remote.origin.pushurl:
         - "git@gitlab.com:garden-rs/garden-seeds.git"
         - "git@github.com:garden-rs/garden-seeds.git"
 ...
