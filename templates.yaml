@@ -59,6 +59,7 @@ templates:
       git_annex_ignore_remote: origin
     gitconfig:
       remote.${git_annex_ignore_remote}.annex-ignore: true
+      remote.${git_annex_ignore_remote}.annex-sync: false
 
   makefile:
     variables:
