@@ -81,8 +81,12 @@ templates:
     commands:
       setup: |
         test -d ${py_venv} || ${python} -m venv ${py_venv_args} ${py_venv}
+        source ${py_venv}/bin/activate
         pip install --upgrade pip
         pip install wheel
+      dev: |
+        source ${py_venv}/bin/activate
+        pip install --editable .
 
   rust:
     variables:
