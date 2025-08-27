@@ -14,14 +14,14 @@ variables:
     then
         source "${py_venv}/bin/activate"
     fi
-  py_pip_editable: "--editable"
-  py_pip_upgrade: ""
   py_is_virtualenv: |
     $ ${python} -c '
     import os, sys
     if sys.prefix != sys.base_prefix or os.environ.get("VIRTUAL_ENV"):
         print("true")
     '
+  py_pip_editable: "--editable"
+  py_pip_upgrade: ""
   py_version: $ ${python} -c 'import sysconfig as sc; print(sc.get_python_version())'
   py_version_brief: $ ${python} -c 'import sys; print("%s%s" % sys.version_info[:2])'
   py_venv: env${py_version_brief}
