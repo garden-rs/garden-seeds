@@ -9,6 +9,19 @@ variables:
   git_remote: origin
   num_procs: $ nproc 2>/dev/null || sysctl -n hw.activecpu 2>/dev/null || echo 4
   python: python3
+  py_activate: |
+    if test -z "${py_is_virtualenv}" && test -f "${py_venv}/bin/activate"
+    then
+        source "${py_venv}/bin/activate"
+    fi
+  py_pip_editable: "--editable"
+  py_pip_upgrade: ""
+  py_is_virtualenv: |
+    $ ${python} -c '
+    import os, sys
+    if sys.prefix != sys.base_prefix or os.environ.get("VIRTUAL_ENV"):
+        print("true")
+    '
   py_version: $ ${python} -c 'import sysconfig as sc; print(sc.get_python_version())'
   py_version_brief: $ ${python} -c 'import sys; print("%s%s" % sys.version_info[:2])'
   py_venv: env${py_version_brief}

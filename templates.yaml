@@ -80,13 +80,16 @@ templates:
       PYTHONPATH: "${TREE_PATH}"
     commands:
       setup: |
-        test -d ${py_venv} || ${python} -m venv ${py_venv_args} ${py_venv}
-        source ${py_venv}/bin/activate
-        pip install --upgrade pip
-        pip install wheel
+        test -d "${py_venv}" || "${python}" -m venv ${py_venv_args} "${py_venv}"
+        ${py_activate}
+        if test -n "${py_pip_upgrade}"
+        then
+            pip install --upgrade pip
+            pip install --upgrade setuptools
+        fi
       dev: |
-        source ${py_venv}/bin/activate
-        pip install --editable .
+        ${py_activate}
+        pip install ${py_pip_editable} .
 
   rust:
     variables:
