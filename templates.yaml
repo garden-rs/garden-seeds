@@ -18,8 +18,11 @@ templates:
       # Variants on "opt/optimize/rel/release" map to "Release".
       cmake_build_type: |
         $ case "${build_mode}" in
-        *debug*|*dbg*)
+        *dbg*)
           echo Debug
+          ;;
+        *debug*)
+          echo RelWithDebInfo
           ;;
         *opt*|*rel*)
           echo Release
