@@ -31,27 +31,27 @@ templates:
           echo RelWithDebInfo
           ;;
         esac
+      cmake_ccache: ""  # Set to "ccache" to enable ccache.
       cmake_generator: Ninja
       cmake_extra_args: ""
+      cmake_source_dir: "${TREE_PATH}"
     commands:
-      build: |
-        build_dir=build/${build_mode}
-        test -d $build_dir &&
-        test $build_dir/cmake.conf -nt CMakeLists.txt ||
-          cmake \
-            -G ${cmake_generator} \
-            -B $build_dir \
-            -D CMAKE_INSTALL_PREFIX=${prefix} \
-            -D CMAKE_BUILD_TYPE=${cmake_build_type} \
-            -D CMAKE_EXPORT_COMPILE_COMMANDS=ON \
-            -D CMAKE_INSTALL_MESSAGE=NEVER \
-            ${cmake_extra_args} .
-        cmake --build $build_dir -- -j${num_procs}
-        # Link build/compile_commands.json to the current build
+      configure: |
+        cmake \
+          -S "${cmake_source_dir}" \
+          -B "${build_dir}" \
+          -G ${cmake_generator} \
+          -D CMAKE_BUILD_TYPE=${cmake_build_type} \
+          -D CMAKE_C_COMPILER_LAUNCHER="${cmake_ccache}" \
+          -D CMAKE_CXX_COMPILER_LAUNCHER="${cmake_ccache}" \
+          -D CMAKE_EXPORT_COMPILE_COMMANDS=ON \
+          -D CMAKE_INSTALL_MESSAGE=NEVER \
+          -D CMAKE_INSTALL_PREFIX=${prefix} \
+          ${cmake_extra_args}
         rm -f build/compile_commands.json
-        ln -s ${build_mode}/compile_commands.json build/compile_commands.json
-      install: |
-        cmake --install build/${build_mode}
+        ln -s "${platform_dir}/compile_commands.json" build/compile_commands.json
+      build: cmake --build "${build_dir}" --target all --parallel ${num_procs}
+      install: env DESTDIR="${DESTDIR}" cmake --build "${build_dir}" --target install
 
   git-annex-ignore:
     description: |
