@@ -5,9 +5,11 @@ variables:
   prefix: "${TREE_PATH}/${target_path}"
   bindir: "${prefix}/bin"
   # Everything else
+  build_dir: "build/${platform_dir}"
   build_mode: debug
   git_remote: origin
   num_procs: $ nproc 2>/dev/null || sysctl -n hw.activecpu 2>/dev/null || echo 4
+  platform_dir: "${uname_sys}-${uname_rel}-${uname_cpu}-${build_mode}"
   python: python3
   py_activate: |
     if test -z "${py_is_virtualenv}" && test -f "${py_venv}/bin/activate"
@@ -27,4 +29,7 @@ variables:
   py_venv: env${py_version_brief}
   py_venv_args: ""
   target_path: "target/${build_mode}"
+  uname_cpu: $ uname -m
+  uname_sys: $ uname -s
+  uname_rel: $ uname -r | cut -d- -f1
 ...
