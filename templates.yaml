@@ -109,17 +109,17 @@ templates:
       build: meson compile -C "${build-dir}" "$@"
       install: meson install -C "${build-dir}" "$@"
       test: |
-        meson test -v -C "$[build-dir}" ${meson-test-args} \
+        meson test -v -C "${build-dir}" ${meson-test-args} \
             --test-args="${meson-test-test-args}" ${test} "$@"
       test/list: meson test -C "${build-dir}" --list
       test/name: |
         if test -z "${name}"
         then
-            echo "error: specify a test name, e.g. garden test/name  -D name=9003"
+            echo "error: specify a test name, e.g. garden test/name -D name=9003"
             exit 0
         fi
         test_name=$(meson test -C "${build-dir}" --list | grep "${name}")
-        meson test -C "$[build-dir}" $[meson-test-args} \
+        meson test -C "${build-dir}" ${meson-test-args} \
             --test-args="${meson-test-test-args}" $test_name "$@"
 
   python:
