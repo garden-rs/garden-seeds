@@ -2,6 +2,6 @@
 commands:
   git: git "$@"
   mergeup: |
-    git fetch --prune "${git_remote}"
+    git fetch --prune "${git-remote}"
     git merge --ff-only "$@"
 ...

@@ -3,7 +3,7 @@ garden:
 
 templates:
   bin:
-    description: Add ${TREE_PATH}/bin to ${PATH}.
+    description: Add ${TREE_PATH}/bin to $PATH.
     environment:
       PATH: "${TREE_PATH}/bin"
 
@@ -12,12 +12,12 @@ templates:
     environment:
       PATH: "${prefix}/bin"
     variables:
-      # cmake_build_type maps ${build_mode} to an appropriate CMAKE_BUILD_TYPE.
+      # cmake_build_type maps ${build-mode} to an appropriate CMAKE_BUILD_TYPE.
       # The default build mode maps to CMAKE_BUILD_TYPE=RelWithDebInfo.
       # Variants on "debug/dbg" map to "Debug".
       # Variants on "opt/optimize/rel/release" map to "Release".
-      cmake_build_type: |
-        $ case "${build_mode}" in
+      cmake-build-type: |
+        $ case "${build-mode}" in
         *debug*|*dbg*)
           echo Debug
           ;;
@@ -28,27 +28,24 @@ templates:
           echo RelWithDebInfo
           ;;
         esac
-      cmake_generator: Ninja
-      cmake_extra_args: ""
+      cmake-generator: Ninja
+      cmake-setup-args: ""
     commands:
-      build: |
-        build_dir=build/${build_mode}
-        test -d $build_dir &&
-        test $build_dir/cmake.conf -nt CMakeLists.txt ||
-          cmake \
-            -G ${cmake_generator} \
-            -B $build_dir \
-            -D CMAKE_INSTALL_PREFIX=${prefix} \
-            -D CMAKE_BUILD_TYPE=${cmake_build_type} \
+      setup: |
+        cmake \
+            -S . \
+            -G "${cmake-generator}" \
+            -B "${build-dir}" \
+            -D CMAKE_INSTALL_PREFIX="${prefix}" \
+            -D CMAKE_BUILD_TYPE=${cmake-build-type} \
             -D CMAKE_EXPORT_COMPILE_COMMANDS=ON \
             -D CMAKE_INSTALL_MESSAGE=NEVER \
-            ${cmake_extra_args} .
-        cmake --build $build_dir -- -j${num_procs}
+            ${cmake-setup-args}
         # Link build/compile_commands.json to the current build
         rm -f build/compile_commands.json
-        ln -s ${build_mode}/compile_commands.json build/compile_commands.json
-      install: |
-        cmake --install build/${build_mode}
+        ln -s "${build-mode}/compile_commands.json" build/compile_commands.json
+      build: cmake --build "${build-dir}" -j${num-procs}
+      install: cmake --install "${build-dir}"
 
   git-annex-ignore:
     description: |
@@ -56,19 +53,19 @@ templates:
       origin contains only metadata and the data is replacated across multiple worktrees
       using git-annex.
     variables:
-      git_annex_ignore_remote: origin
+      git-annex-ignore-remote: origin
     gitconfig:
-      remote.${git_annex_ignore_remote}.annex-ignore: true
-      remote.${git_annex_ignore_remote}.annex-sync: false
+      remote.${git-annex-ignore-remote}.annex-ignore: true
+      remote.${git-annex-ignore-remote}.annex-sync: false
 
   makefile:
     variables:
-      make_args: ""
-      make_cmd: make -j${num_procs} DESTDIR="${DESTDIR}" prefix="${prefix}" ${make_args}
+      make-args: ""
+      make-cmd: make -j${num-procs} DESTDIR="${DESTDIR}" prefix="${prefix}" ${make-args}
     commands:
-      build: ${make_cmd} all "$@"
-      install: ${make_cmd} install "$@"
-      test: ${make_cmd} test "$@"
+      build: ${make-cmd} all "$@"
+      install: ${make-cmd} install "$@"
+      test: ${make-cmd} test "$@"
 
   python:
     description: |
@@ -76,44 +73,44 @@ templates:
       Add envXY/bin to ${PATH} to activate the virtualenv.
       Add ${TREE_PATH} to ${PYTHONPATH} to make the modules available.
     environment:
-      PATH: ${TREE_PATH}/${py_venv}/bin
+      PATH: ${TREE_PATH}/${py-venv}/bin
       PYTHONPATH: "${TREE_PATH}"
     commands:
       setup: |
-        test -d "${py_venv}" || "${python}" -m venv ${py_venv_args} "${py_venv}"
-        ${py_activate}
-        if test -n "${py_pip_upgrade}"
+        test -d "${py-venv}" || "${python}" -m venv ${py-venv-args} "${py-venv}"
+        ${py-activate}
+        if test -n "${py-pip-upgrade}"
         then
             pip install --upgrade pip
             pip install --upgrade setuptools
         fi
       dev: |
-        ${py_activate}
-        pip install ${py_pip_editable} .
+        ${py-activate}
+        pip install ${py-pip-editable} .
 
   rust:
     variables:
-      cargo_build_args: ""
-      cargo_build_release: $ test "${build_mode}" = "release" && printf '%s' --release
-      cargo_install_args: ""
-      cargo_install_release: $ test "${build_mode}" = "release" && printf '%s' --release
-      cargo_test_args: ""
+      cargo-build-args: ""
+      cargo-build-release: $ test "${build-mode}" = "release" && printf '%s' --release
+      cargo-install-args: ""
+      cargo-install-release: $ test "${build-mode}" = "release" && printf '%s' --release
+      cargo-test_args: ""
     environment:
-      PATH: "${TREE_PATH}/${target_path}"
+      PATH: "${TREE_PATH}/${target-path}"
     commands:
-      build: cargo build --jobs ${num_procs} ${cargo_build_release} ${cargo_build_args} "$@"
+      build: cargo build --jobs ${num-procs} ${cargo-build-release} ${cargo-build-args} "$@"
       check: |
-        cargo check --jobs ${num_procs} "$@"
+        cargo check --jobs ${num-procs} "$@"
         cargo clippy --all -- -D warnings
         cargo fmt --check
       check/clippy: cargo clippy --fix "$@" -- -D warnings
       check/fmt: cargo fmt --check "$@"
       clean: cargo clean "$@"
-      doc: cargo doc --jobs ${num_procs} "$@"
+      doc: cargo doc --jobs ${num-procs} "$@"
       fmt: cargo fmt "$@"
-      install: cargo install ${cargo_install_release} ${cargo_install_args} --path . "$@"
+      install: cargo install ${cargo-install-release} ${cargo-install-args} --path . "$@"
       publish: cargo publish "$@"
       run: cargo run "$@"
-      test: cargo test --jobs ${num_procs} ${cargo_test_args} "$@"
+      test: cargo test --jobs ${num-procs} ${cargo-test-args} "$@"
       update: cargo update "$@"
 ...
