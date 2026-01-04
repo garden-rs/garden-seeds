@@ -25,8 +25,7 @@ templates:
     environment:
       CMAKE_PREFIX_PATH: ${prefix}
     variables:
-      # Set to "ccache" to enable ccache.
-      cmake-ccache: ""
+      cmake-ccache: ""  # Set to "ccache" to enable ccache.
       cmake-c-launcher: "${cmake-ccache}"
       cmake-cxx-launcher: "${cmake-ccache}"
       # cmake-build-type maps ${build-mode} to an appropriate CMAKE_BUILD_TYPE.
@@ -48,7 +47,7 @@ templates:
       cmake-generator: Ninja
       cmake-setup-args: ""
     commands:
-      setup: |
+      cmake/setup: |
         cmake \
             -S . \
             -G "${cmake-generator}" \
@@ -60,11 +59,11 @@ templates:
             -D CMAKE_EXPORT_COMPILE_COMMANDS=ON \
             -D CMAKE_INSTALL_MESSAGE=NEVER \
             ${cmake-setup-args}
-        # Link build/compile_commands.json to the current build
-        rm -f build/compile_commands.json
-        ln -s "${platform-dir}/compile_commands.json" build/compile_commands.json
       build: cmake --build "${build-dir}" -j${num-procs}
       install: cmake --install "${build-dir}"
+      setup>:
+        - cmake/setup
+        - setup/compile-commands
 
   git-annex-ignore:
     description: |
@@ -99,7 +98,7 @@ templates:
       meson-test-args: ""
       meson-test-test-args: ""
     commands:
-      setup: |
+      meson/setup: |
         if test -d "${build-dir}"
         then
             meson_reconfigure=--reconfigure
@@ -108,6 +107,9 @@ templates:
           --prefix="${prefix}" ${meson-setup-args} "${build-dir}" "$@"
       build: meson compile -C "${build-dir}" "$@"
       install: meson install -C "${build-dir}" "$@"
+      setup>:
+        - meson/setup
+        - setup/compile-commands
       test: |
         meson test -v -C "${build-dir}" ${meson-test-args} \
             --test-args="${meson-test-test-args}" ${test} "$@"
@@ -168,4 +170,13 @@ templates:
       run: cargo run "$@"
       test: cargo test --jobs ${num-procs} ${cargo-test-args} "$@"
       update: cargo update "$@"
+
+commands:
+  setup/compile-commands: |
+    if type realpath >/dev/null && test -f "${compile-commands-json}"
+    then
+        rm -f "${compile-commands-json-link}"
+        symlink_to=$(realpath --relative-to="${build-top-dir}" "${compile-commands-json}")
+        ln -s "$symlink_to" "${compile-commands-json-link}"
+    fi
 ...

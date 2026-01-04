@@ -8,7 +8,10 @@ variables:
   libdir: "${prefix}/lib"
   # Everything else
   build-mode: debug
-  build-dir: build/${platform-dir}
+  build-dir: "${build-top-dir}/${platform-dir}"
+  build-top-dir: build
+  compile-commands-json: "${build-dir}/compile_commands.json"
+  compile-commands-json-link: "${build-top-dir}/compile_commands.json"
   gid: $ id -g
   git-describe-abbrev: "--abbrev=10"
   git-describe-always: "--always"
