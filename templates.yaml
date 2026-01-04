@@ -62,7 +62,7 @@ templates:
             ${cmake-setup-args}
         # Link build/compile_commands.json to the current build
         rm -f build/compile_commands.json
-        ln -s "${build-mode}/compile_commands.json" build/compile_commands.json
+        ln -s "${platform-dir}/compile_commands.json" build/compile_commands.json
       build: cmake --build "${build-dir}" -j${num-procs}
       install: cmake --install "${build-dir}"
 

@@ -8,7 +8,7 @@ variables:
   libdir: "${prefix}/lib"
   # Everything else
   build-mode: debug
-  build-dir: build/${build-mode}
+  build-dir: build/${platform-dir}
   gid: $ id -g
   git-describe-abbrev: "--abbrev=10"
   git-describe-always: "--always"
@@ -19,6 +19,7 @@ variables:
   git-describe-version: $ git describe ${git-describe-args}
   git-remote: origin
   num-procs: $ nproc 2>/dev/null || sysctl -n hw.activecpu 2>/dev/null || echo 4
+  platform-dir: "${uname-sys}-${uname-rel}-${uname-cpu}-${build-mode}"
   python: python3
   py-activate: |
     if test -z "${py-is-virtualenv}" && test -f "${py-venv}/bin/activate"
@@ -39,5 +40,8 @@ variables:
   py-venv-args: ""
   target-path: "target/${build-mode}"
   uid: $ id -u
+  uname-cpu: $ uname -m
+  uname-sys: $ uname -s
+  uname-rel: $ uname -r | cut -d- -f1
   version: "${git-describe-version}"
 ...
