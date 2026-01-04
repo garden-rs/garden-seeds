@@ -25,13 +25,17 @@ templates:
     environment:
       CMAKE_PREFIX_PATH: ${prefix}
     variables:
-      # cmake_build_type maps ${build-mode} to an appropriate CMAKE_BUILD_TYPE.
-      # The default build mode maps to CMAKE_BUILD_TYPE=RelWithDebInfo.
-      # Variants on "debug/dbg" map to "Debug".
+      # Set to "ccache" to enable ccache.
+      cmake-ccache: ""
+      cmake-c-launcher: "${cmake-ccache}"
+      cmake-cxx-launcher: "${cmake-ccache}"
+      # cmake-build-type maps ${build-mode} to an appropriate CMAKE_BUILD_TYPE.
+      # Variants on "dbg" map to "Debug".
       # Variants on "opt/optimize/rel/release" map to "Release".
+      # All other values, including the default "debug" value, map to "RelWithDebInfo".
       cmake-build-type: |
         $ case "${build-mode}" in
-        *debug*|*dbg*)
+        *dbg*)
           echo Debug
           ;;
         *opt*|*rel*)
@@ -51,6 +55,8 @@ templates:
             -B "${build-dir}" \
             -D CMAKE_INSTALL_PREFIX="${prefix}" \
             -D CMAKE_BUILD_TYPE=${cmake-build-type} \
+            -D CMAKE_C_COMPILER_LAUNCHER="${cmake-c-launcher}" \
+            -D CMAKE_CXX_COMPILER_LAUNCHER="${cmake-cxx-launcher}" \
             -D CMAKE_EXPORT_COMPILE_COMMANDS=ON \
             -D CMAKE_INSTALL_MESSAGE=NEVER \
             ${cmake-setup-args}
