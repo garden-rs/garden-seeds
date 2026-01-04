@@ -7,10 +7,23 @@ templates:
     environment:
       PATH: "${TREE_PATH}/bin"
 
+  bindir:
+    description: Add ${bindir} to $PATH.
+    environment:
+      PATH: "${bindir}"
+
+  libdir:
+    description: Add ${libdir} to $LD_LIBRARY_PATH
+    environment:
+      LD_LIBRARY_PATH: "${libdir}"
+
   cmake:
     description: Build a generic cmake project
+    extend:
+      - bindir
+      - libdir
     environment:
-      PATH: "${prefix}/bin"
+      CMAKE_PREFIX_PATH: ${prefix}
     variables:
       # cmake_build_type maps ${build-mode} to an appropriate CMAKE_BUILD_TYPE.
       # The default build mode maps to CMAKE_BUILD_TYPE=RelWithDebInfo.
