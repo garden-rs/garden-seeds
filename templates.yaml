@@ -72,6 +72,9 @@ templates:
       remote.${git-annex-ignore-remote}.annex-sync: false
 
   makefile:
+    extend:
+      - bindir
+      - libdir
     variables:
       make-args: ""
       make-cmd: make -j${num-procs} DESTDIR="${DESTDIR}" prefix="${prefix}" ${make-args}
